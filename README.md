@@ -1,4 +1,4 @@
-# FoundationPluginsForBC
+# BCFoundationPlugins
 The Foundation Plugin System for Bridge Commander, the Python framework that jumpstarted the BC modding scene
 
 ---
