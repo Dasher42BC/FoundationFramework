@@ -5,7 +5,7 @@ This is the Foundation Framework for Bridge Commander, the Python framework that
 The Foundation is:
 
 - A forward-looking, object-oriented flexible core framework for game assets. The Foundation overwrites standard Bridge Commander scripts where necessary so you don't have to, and defines ways for well-written mods from different authors to co-exist without conflict.
-- A means to automatically load plugins and updates, and clear ways to allow new content to supercede the old.
+- A means to automatically load plugins and updates, and a way for new content to supercede the old.
 - Function libraries and object-oriented classes which allow for reliably added and modded content. Anything the game's Python layer can do, the Foundation offers several approaches adding to or replacing the game's content with new mods. If needed, they can even be activated and de-activated in-game if packaged as mutators.
 
 The Foundation Framework has remained the shared framework behind nearly all non-trivial Bridge Commander mods since 2002 because it allows both beginner-friendly and content-specific ways to add ships, sounds, and media, and because for more technically skilled coders, it offers a core library that allows standard ways to add Python code capable of anything the game engine allows.
