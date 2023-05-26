@@ -25,6 +25,8 @@ _deps
 __pycache__
 */__pycache__
 *.pyc
+*.py_error
+*.pyc_error
 
 # Visual Studio 2015 cache/options directory
 .vs/
