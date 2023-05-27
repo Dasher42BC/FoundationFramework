@@ -329,6 +329,4 @@ MLeoDaalder who did much to update and maintain Foundation extensions over the y
 
 And also Sleight42, Sneaker98, and Banbury whose feedback and snippets contributed to the Foundation and its popular add-ons.
 
-Special thanks also go out to Nanobyte and DigitalFiend whose work is making the Foundation more accessible for the end users.
-
 That's all, have fun!
