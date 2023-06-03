@@ -57,10 +57,8 @@ except:
 
 print "Loading Foundation 2023..."
 import Custom.Versions.Foundation
-print "...Foundation 2023 loaded."
-
 import Foundation
-print Foundation.version
+print "...Foundation", Foundation.version, "loaded"
 
 # Terminate function is called on UtopiaModule::Terminate.
 def Terminate():

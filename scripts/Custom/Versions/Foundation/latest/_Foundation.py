@@ -10,7 +10,6 @@ import FoundationTriggers
 from bcdebug import debug
 
 
-
 #########################################################
 # Shared dictionaries - direct access of these is deprecated
 
@@ -168,6 +167,7 @@ bFoundationInitialized = 0
 
 def Initialize(bTestFlag=0):
     import Foundation
+    global bTesting
 
     if not Foundation.bFoundationInitialized:
         import StaticDefs
@@ -1358,7 +1358,7 @@ def LoadExtraShips(dir="scripts\\Custom\\Ships", hpdir="scripts\\Custom\\Ships\\
 # Returns:  None
 
 
-def LoadExtraPlugins(dir="scripts\\Custom\\Autoload", dExcludePlugins={}):
+def LoadExtraPlugins(dir="scripts\\Custom\\Autoload", dExcludePlugins=g_dExcludePlugins):
     import nt
     import string
 
@@ -1377,7 +1377,10 @@ def LoadExtraPlugins(dir="scripts\\Custom\\Autoload", dExcludePlugins={}):
         fileName = string.join(s[:-1], ".")
 
         # We don't want to accidentally load the wrong ship.
-        if (extension == "pyc" or extension == "py") and not dExcludePlugins.has_key(fileName):
+        if (extension == "pyc" or extension == "py"):
+            if dExcludePlugins.has_key(fileName):
+                debug(__name__ + ": Ignoring outdated plugin" + fileName)
+                continue
             if bTesting:
                 pModule = __import__(dotPrefix + fileName)
             else:
