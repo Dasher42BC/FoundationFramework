@@ -311,7 +311,9 @@ Permission is given to modify or distribute the included files as a component of
 
 This README.md file, the SDKLicense.txt, and LICENSE file shall be included in any distribution, and credit given in any work which incorporates this package's files,
 
-Any inclusion of the non-Totally Games source code contained herein may only be distributed with source code included per the terms of the Lesser GNU Public License (LGPL) as of v2.1 and the terms of Totally Games' SDKLicense.txt . Any redistributions which include these Python assets, imports them, revises them, or builds on them must include their own Python source, including a .py file for every included .pyc, sufficient to have a complete Python layer when added to Totally Games assets and Foundation libraries. This ensures the maintainability and fairness of the Foundation ecosystem to all participants.
+Any inclusion of the non-Totally Games source code contained herein may only be distributed with complete source code of the Foundation and all .py files of the codebase built with it, included per the terms of the Lesser GNU Public License (LGPL) as of v2.1 and the terms of Totally Games' SDKLicense.txt. Any redistributions which include these Python assets, imports them, revises them, or builds on them must include their own Python source, including a .py file for every included .pyc, sufficient to have a complete Python layer when added to Totally Games assets and Foundation libraries. This ensures the maintainability and fairness of the Foundation ecosystem to all participants.
+
+A documented link to the Bridge Commander SDK 1.1 such as https://www.moddb.com/games/star-trek-bridge-commander/downloads/star-trek-bridge-commander-sdk-v11 for any unmodified stock .py files is a good way to uphold both the Foundation's LGPL license and the Totally Games/Activision license simultaneously.
 
 Binary and non-Python assets (i.e. NIFs, TGAs, WAVs, MP3s) included with any redistribution of the Foundation Framework shall be construed exclusively as "New Game Materials" per the Totally Games SDK license. As they are not code, they are not contiguous with the LGPL Python code contained herein.
 
