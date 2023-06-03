@@ -5,6 +5,7 @@
 
 import App
 import Foundation
+
 # import types # Not everyone has the types module, fake it...
 
 ListType = type([])
@@ -42,7 +43,6 @@ if int(Foundation.version[0:8]) <= 20040628:
 
             oRoot = TreeNode("Root", prefab=menu)
             for race in raceList:
-
                 self.textButton(race)
                 pRaceButton = self.textButton.MakeSubMenu()
                 oRace = TreeNode(race, prefab=pRaceButton)
@@ -67,29 +67,25 @@ if int(Foundation.version[0:8]) <= 20040628:
 
                     oWork = oRace
 
-                    for name in (ship.__dict__.get("SubMenu", []) + ship.__dict__.get("SubSubMenu", [])):
+                    for name in ship.__dict__.get("SubMenu", []) + ship.__dict__.get("SubSubMenu", []):
                         oMenu = oWork.children.get(name + "_m", None)
                         if not oMenu:
-                            oMenu = TreeNode(
-                                name, prefab=App.STCharacterMenu_Create(name))
+                            oMenu = TreeNode(name, prefab=App.STCharacterMenu_Create(name))
                             oWork.children[name + "_m"] = oMenu
                             if ship.Priority:
                                 oMenu.priority = ship.Priority
                         oWork = oMenu
                     bCreated = 0
                     if HasMVAM():
-                        oWork, bCreated = DoMVAMMenus(
-                            oWork, ship, buttonType, uiHandler, self, raceShipList, fWidth, fHeight)
+                        oWork, bCreated = DoMVAMMenus(oWork, ship, buttonType, uiHandler, self, raceShipList, fWidth, fHeight)
                     if not bCreated:
                         appended = ""
                         while oWork.children.has_key(ship.name + appended):
                             appended = appended + " "
-                        oWork.children[ship.name +
-                                       appended] = TreeNode(ship.name, oShip=ship)
+                        oWork.children[ship.name + appended] = TreeNode(ship.name, oShip=ship)
                         oWork.children[ship.name + appended].bShip = 1
                         if ship.Priority:
-                            oWork.children[ship.name +
-                                           appended].priority = ship.Priority
+                            oWork.children[ship.name + appended].priority = ship.Priority
 
             BuildMenu(oRoot, self, buttonType, uiHandler, fWidth, fHeight)
 
@@ -138,18 +134,15 @@ if int(Foundation.version[0:8]) <= 20040628:
 
             if object.bShip or (object.bMVAM and not len(object.children)):
                 if not object.prefab:
-                    object.prefab = self.textButton.MakeIntButton(
-                        buttonType, object.oShip.num, uiHandler, fWidth, fHeight)
+                    object.prefab = self.textButton.MakeIntButton(buttonType, object.oShip.num, uiHandler, fWidth, fHeight)
             else:
                 if len(object.children):
                     if not object.prefab:
                         object.prefab = self.textButton.MakeSubMenu()
                     if object.name == "Human (Tau'ri) Ships":
-                        BuildMenu(object, self, buttonType,
-                                  uiHandler, fWidth, fHeight, 1)
+                        BuildMenu(object, self, buttonType, uiHandler, fWidth, fHeight, 1)
                     else:
-                        BuildMenu(object, self, buttonType,
-                                  uiHandler, fWidth, fHeight)
+                        BuildMenu(object, self, buttonType, uiHandler, fWidth, fHeight)
 
                     if object.bMVAM:
                         object.prefab.SetTwoClicks()
@@ -161,6 +154,7 @@ if int(Foundation.version[0:8]) <= 20040628:
                         object.prefab.SetActivationEvent(pEvent)
 
             oMenu.prefab.AddChild(object.prefab)
+
     bHasMVAM = -1
 
     def HasMVAM():
@@ -188,8 +182,7 @@ if int(Foundation.version[0:8]) <= 20040628:
             PosModName = string.split(i, ".")
             if len(PosModName) > 1 and PosModName[0] != "__init__":
                 try:
-                    PosMod = __import__(
-                        "Custom.Autoload.Mvam." + PosModName[0])
+                    PosMod = __import__("Custom.Autoload.Mvam." + PosModName[0])
                     if PosMod and PosMod.__dict__.has_key("MvamShips"):
                         if ship.shipFile in PosMod.MvamShips:
                             Mod = PosMod

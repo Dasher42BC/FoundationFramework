@@ -1,4 +1,5 @@
 from bcdebug import debug
+
 # Foundation Triggers Extension 20030305 for Bridge Commander
 # Written March 5, 2003 by Dasher42, all rights reserved.
 
@@ -6,156 +7,151 @@ from bcdebug import debug
 import Foundation
 
 if int(Foundation.version[0:8]) < 20030305:
+    print 'Outdated Foundation, updating to 20030305'
+    import FoundationTriggers
+    import App
+    import Registry
 
-	import FoundationTriggers
-	import App
-	import Registry
+    class ListenerDef:
+        def __init__(self, funcs):
+            debug(__name__ + ", __init__")
+            self.funcs = funcs
 
-	print 'Outdated Foundation, updating functions'
+        def __call__(self, pObject, pEvent):
+            debug(__name__ + ", __call__")
+            for i in self.funcs:
+                i(pObject, pEvent)
 
+    class TriggerDef(Foundation.OverrideDef):
+        def __init__(self, name, eventKey, dict={}):
+            debug(__name__ + ", __init__")
+            self.eventKey = eventKey
 
-	class ListenerDef:
-		def __init__(self, funcs):
-			debug(__name__ + ", __init__")
-			self.funcs = funcs
+            self.sourceMask = long(0)
+            self.destMask = long(0)
+            self.fireMask = long(0)
+            self.targetMask = long(0)
 
-		def __call__(self, pObject, pEvent):
-			debug(__name__ + ", __call__")
-			for i in self.funcs:
-				i(pObject, pEvent)
+            Foundation.OverrideDef.__init__(self, name, None, None, dict)
 
+        def _SwapInModules(self, pre, post):
+            pass
 
-	class TriggerDef(Foundation.OverrideDef):
-		def __init__(self, name, eventKey, dict = {}):
-			debug(__name__ + ", __init__")
-			self.eventKey = eventKey
+        def _SwapOutModules(self, pre, post):
+            pass
 
-			self.sourceMask = long(0)
-			self.destMask = long(0)
-			self.fireMask = long(0)
-			self.targetMask = long(0)
+        def __call__(self, pObject, pEvent, dict={}):
+            debug(__name__ + ", __call__")
+            pass
 
-			Foundation.OverrideDef.__init__(self, name, None, None, dict)
+        def MakeListener(self):
+            debug(__name__ + ", MakeListener")
+            return Foundation.ListenerDef([self])
 
-		def _SwapInModules(self, pre, post):				pass
-		def _SwapOutModules(self, pre, post):				pass
+        def Activate(self):
+            debug(__name__ + ", Activate")
+            key = str(self.eventKey)
+            # print 'Registering listener', self.name, 'FoundationTriggers.' + key
+            if not FoundationTriggers.__dict__.has_key(key):
+                FoundationTriggers.__dict__[key] = self.MakeListener()
+                pTopWindow = App.TopWindow_GetTopWindow()
+                pWindow = pTopWindow.FindMainWindow(App.MWT_OPTIONS)
+                if pWindow:
+                    App.g_kEventManager.AddBroadcastPythonFuncHandler(self.eventKey, pWindow, "FoundationTriggers." + str(key))
+            else:
+                FoundationTriggers.__dict__[key].funcs.append(self)
 
-		def __call__(self, pObject, pEvent, dict = {}):
-			debug(__name__ + ", __call__")
-			pass
+            # print FoundationTriggers.__dict__.keys()
 
-		def MakeListener(self):
-			debug(__name__ + ", MakeListener")
-			return Foundation.ListenerDef([ self ])
+        def Deactivate(self):
+            debug(__name__ + ", Deactivate")
+            key = str(self.eventKey)
 
-		def Activate(self):
-			debug(__name__ + ", Activate")
-			key = str(self.eventKey)
-			#print 'Registering listener', self.name, 'FoundationTriggers.' + key
-			if not FoundationTriggers.__dict__.has_key(key):
-				FoundationTriggers.__dict__[key] = self.MakeListener()
-				pTopWindow = App.TopWindow_GetTopWindow()
-				pWindow = pTopWindow.FindMainWindow(App.MWT_OPTIONS)
-				if pWindow:
-					App.g_kEventManager.AddBroadcastPythonFuncHandler(self.eventKey, pWindow, 'FoundationTriggers.' + str(key))
-			else:
-				FoundationTriggers.__dict__[key].funcs.append(self)
+            # print FoundationTriggers.__dict__.keys()
 
-			#print FoundationTriggers.__dict__.keys()
+            # print 'Removing listener', self.name
+            try:
+                FoundationTriggers.__dict__[key].funcs.remove(self)
+                if not len(FoundationTriggers.__dict__[key].funcs):
+                    pTopWindow = App.TopWindow_GetTopWindow()
+                    pWindow = pTopWindow.FindMainWindow(App.MWT_OPTIONS)
+                    App.g_kEventManager.RemoveBroadcastHandler(self.eventKey, pWindow, "FoundationTriggers." + str(key))
+                    del FoundationTriggers.__dict__[key]
+            except:
+                pass
 
-		def Deactivate(self):
-			debug(__name__ + ", Deactivate")
-			key = str(self.eventKey)
+    # WeaponHit
+    # 	pShip = App.ShipClass_Cast(pEvent.GetDestination())
+    # 	pTorp = App.Torpedo_Cast(pEvent.GetSource())
+    # 	pAttacker = App.ShipClass_Cast(pEvent.GetFiringObject())
 
-			#print FoundationTriggers.__dict__.keys()
+    # 		kVectNiWorldHitPoint=pEvent.GetWorldHitPoint()		#Determine where the torpedo struck the shields
 
-			#print 'Removing listener', self.name
-			try:
-				FoundationTriggers.__dict__[key].funcs.remove(self)
-				if not len(FoundationTriggers.__dict__[key].funcs):
-					pTopWindow = App.TopWindow_GetTopWindow()
-					pWindow = pTopWindow.FindMainWindow(App.MWT_OPTIONS)
-					App.g_kEventManager.RemoveBroadcastHandler(self.eventKey, pWindow, 'FoundationTriggers.' + str(key))
-					del FoundationTriggers.__dict__[key]
-			except:
-				pass
+    # 	fDamage=pEvent.GetDamage()*0.9	#The power to reflect the weapon causes damage, 10% of the original damage
 
-	# WeaponHit
-	# 	pShip = App.ShipClass_Cast(pEvent.GetDestination())
-	#	pTorp = App.Torpedo_Cast(pEvent.GetSource())
-	# 	pAttacker = App.ShipClass_Cast(pEvent.GetFiringObject())
+    # pTargetShip = App.ShipClass_Cast(pEvent.GetTargetObject())
 
-	#		kVectNiWorldHitPoint=pEvent.GetWorldHitPoint()		#Determine where the torpedo struck the shields
+    # sneakSize = pEvent.GetRadius()
 
-	# 	fDamage=pEvent.GetDamage()*0.9	#The power to reflect the weapon causes damage, 10% of the original damage
+    # pModuleName=pTorp.GetModuleName()
 
-	# pTargetShip = App.ShipClass_Cast(pEvent.GetTargetObject())
+    sList = Foundation.shipList._keyList
 
-	# sneakSize = pEvent.GetRadius()
+    class MaskListenerDef:
+        def __init__(self, funcs):
+            debug(__name__ + ", __init__")
+            self.funcs = funcs
 
-	# pModuleName=pTorp.GetModuleName()
+        def __call__(self, pObject, pEvent):
+            debug(__name__ + ", __call__")
+            pShip = App.ShipClass_Cast(pEvent.GetDestination())
+            pTorp = App.Torpedo_Cast(pEvent.GetSource())
+            pAttacker = App.ShipClass_Cast(pEvent.GetFiringObject())
 
-	sList = Foundation.shipList._keyList
+            iAttackerMask = 0
 
-	class MaskListenerDef:
-		def __init__(self, funcs):
-			debug(__name__ + ", __init__")
-			self.funcs = funcs
+            iShipMask = sList[pShip.GetName()]._pMask
+            iTorpMask = pTorp.GetModuleName()
+            if pAttacker:
+                iAttackerMask = sList[pAttacker.GetName()]._pMask
 
-		def __call__(self, pObject, pEvent):
-			debug(__name__ + ", __call__")
-			pShip = App.ShipClass_Cast(pEvent.GetDestination())
-			pTorp = App.Torpedo_Cast(pEvent.GetSource())
-			pAttacker = App.ShipClass_Cast(pEvent.GetFiringObject())
+            for i in self.funcs:
+                if i.destMask and not iShipMask & i.destMask:
+                    continue
+                if i.sourceMask and not iTorpMask & i.sourceMask:
+                    continue
+                if i.fireMask and not iAttackerMask & i.fireMask:
+                    continue
 
-			iAttackerMask = 0
+                i(pObject, pEvent)
 
-			iShipMask = sList[pShip.GetName()]._pMask
-			iTorpMask = pTorp.GetModuleName()
-			if pAttacker:	iAttackerMask = sList[pAttacker.GetName()]._pMask
+    Foundation.propertyList = Registry.Registry()
+    pList = Foundation.propertyList  # We're going to be looking this up a lot, so let's
+    # not do lots of namespace lookups
 
-			for i in self.funcs:
-				if i.destMask and not iShipMask & i.destMask:		continue
-				if i.sourceMask and not iTorpMask & i.sourceMask:	continue
-				if i.fireMask and not iAttackerMask & i.fireMask:	continue
+    class PropertyDef:
+        def __init__(self, name, triggers, dict={}):
+            debug(__name__ + ", __init__")
+            self.name = name
+            self.triggers = triggers
+            self.mask = long(1 << pList.Register(self, name))
 
-				i(pObject, pEvent)
+        def Add(self, target):
+            debug(__name__ + ", Add")
+            if not target.__dict__.has_key("_pList"):
+                target._pList = [self]
+                target._pMask = self.mask
+            else:
+                target._pList.append(self)
+                target._pMask = target._pMask | self.mask
 
+        def Remove(self, target):
+            debug(__name__ + ", Remove")
+            target._pList.remove(self)
+            target._pMask = target._pMask ^ self.mask
 
+    Foundation.TriggerDef = TriggerDef
+    Foundation.ListenerDef = ListenerDef
+    Foundation.PropertyDef = PropertyDef
 
-
-	Foundation.propertyList = Registry.Registry()
-	pList = Foundation.propertyList		# We're going to be looking this up a lot, so let's
-										# not do lots of namespace lookups
-
-
-	class PropertyDef:
-		def __init__(self, name, triggers, dict = {}):
-			debug(__name__ + ", __init__")
-			self.name = name
-			self.triggers = triggers
-			self.mask = long(1 << pList.Register(self, name))
-
-		def Add(self, target):
-			debug(__name__ + ", Add")
-			if not target.__dict__.has_key('_pList'):
-				target._pList = [ self ]
-				target._pMask = self.mask
-			else:
-				target._pList.append(self)
-				target._pMask = target._pMask | self.mask
-
-		def Remove(self, target):
-			debug(__name__ + ", Remove")
-			target._pList.remove(self)
-			target._pMask = target._pMask ^ self.mask
-
-
-
-
-
-	Foundation.TriggerDef = TriggerDef
-	Foundation.ListenerDef = ListenerDef
-	Foundation.PropertyDef = PropertyDef
-
-	Foundation.version = '20030221p'
+    Foundation.version = "20030305"

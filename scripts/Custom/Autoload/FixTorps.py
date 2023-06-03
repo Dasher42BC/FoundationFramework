@@ -22,7 +22,7 @@ class LoadTrigger(Foundation.TriggerDef):
             timer = Watcher()
 
 
-LoadTrigger('Fix Torp: Loaded', Foundation.TriggerDef.ET_FND_CREATE_PLAYER_SHIP, dict={'modes': [mode]})
+LoadTrigger("Fix Torp: Loaded", Foundation.TriggerDef.ET_FND_CREATE_PLAYER_SHIP, dict={"modes": [mode]})
 
 
 class TorpedoReloaded(Foundation.TriggerDef):
@@ -40,16 +40,16 @@ class TorpedoReloaded(Foundation.TriggerDef):
                 if data.has_key(shipId):
                     shipData = data[shipId]
                     if shipData.has_key(tubeId):
-                        total = shipData[tubeId]['firedTorpedoes'] - 1
+                        total = shipData[tubeId]["firedTorpedoes"] - 1
                         if total < 0:
                             total = 0
-                        shipData[tubeId]['firedTorpedoes'] = total
+                        shipData[tubeId]["firedTorpedoes"] = total
 
         if pObject and pEvent:
             pObject.CallNextHandler(pEvent)
 
 
-TorpedoReloaded('Fix Torp Spread: Torp Reloaded', App.ET_TORPEDO_RELOAD, dict={'modes': [mode]})
+TorpedoReloaded("Fix Torp Spread: Torp Reloaded", App.ET_TORPEDO_RELOAD, dict={"modes": [mode]})
 
 
 class TorpedoFired(Foundation.TriggerDef):
@@ -68,18 +68,18 @@ class TorpedoFired(Foundation.TriggerDef):
                 if data.has_key(shipId):
                     shipData = data[shipId]
                     if shipData.has_key(tubeId):
-                        shipData[tubeId]['firedTorpedoes'] = shipData[tubeId]['firedTorpedoes'] + 1
-                        shipData[tubeId]['reloadDelay'] = reloadDelay
+                        shipData[tubeId]["firedTorpedoes"] = shipData[tubeId]["firedTorpedoes"] + 1
+                        shipData[tubeId]["reloadDelay"] = reloadDelay
                     else:
-                        shipData[tubeId] = {'reloadDelay': reloadDelay, 'firedTorpedoes': 1}
+                        shipData[tubeId] = {"reloadDelay": reloadDelay, "firedTorpedoes": 1}
                 else:
-                    data[shipId] = {tubeId: {'reloadDelay': reloadDelay, 'firedTorpedoes': 1}}
+                    data[shipId] = {tubeId: {"reloadDelay": reloadDelay, "firedTorpedoes": 1}}
 
         if pObject and pEvent:
             pObject.CallNextHandler(pEvent)
 
 
-TorpedoFired('Fix Torp Spread: Torp Fired', App.ET_TORPEDO_FIRED, dict={'modes': [mode]})
+TorpedoFired("Fix Torp Spread: Torp Fired", App.ET_TORPEDO_FIRED, dict={"modes": [mode]})
 
 
 class Watcher:
@@ -114,18 +114,18 @@ class Watcher:
                             if shipData.has_key(tube.GetObjID()):
                                 torpData = shipData[tube.GetObjID()]
                                 if torpData:
-                                    if torpData['firedTorpedoes'] > 0:
-                                        reloadDelay = torpData['reloadDelay'] - 1
+                                    if torpData["firedTorpedoes"] > 0:
+                                        reloadDelay = torpData["reloadDelay"] - 1
                                         if reloadDelay <= 0:
                                             ready = tube.GetNumReady()
                                             maxReady = tube.GetMaxReady()
-                                            remainingTorps = torpData['firedTorpedoes']
+                                            remainingTorps = torpData["firedTorpedoes"]
                                             newTorpCount = ready + remainingTorps
                                             if newTorpCount > remainingTorps:
                                                 newTorpCount = maxReady
                                             tube.SetNumReady(newTorpCount)
-                                            torpData['firedTorpedoes'] = 0
+                                            torpData["firedTorpedoes"] = 0
 
-                                        torpData['reloadDelay'] = reloadDelay
+                                        torpData["reloadDelay"] = reloadDelay
             if notFound:
                 del ship[k]
