@@ -14,9 +14,10 @@ The plugin types range from content-specific, stable, and novice-friendly to pow
 
 - Ships with a high degree of customization, special characteristics, technologies, and even animations.
 - Star systems, some vast compared to those included with the original.
-- Sound/visual Effects.
-- Bridges and custom game settings.
-- Folders for addition music or other specialized games assets .
+- Sound/visual effects.
+- Bridges and their effects.
+- Custom game settings.
+- Folder overlays for optional, additional music or other specialized games assets.
 - Event-driven signal/slot code events, by packaging Bridge Commander's own frameworks in an extensible way.
 - Overrides – A special Foundation concept, these are a kind of reversible code injection. They allow you to reversibly, controllably replace an object or module inside the Python interpreter with another without having to overwrite any of the game's .py/.pyc files.
 - Mutators – Another special Foundation concept; it contains any number of the above mods within itself and allows the (de)activation of its contents from a new section of the game configure screen.
