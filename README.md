@@ -1,12 +1,12 @@
 # Foundation Framework for Bridge Commander
 
-This is the Foundation Plugin Framework for Bridge Commander, the library and toolkit that jumpstarted the game's modding scene. It is a forward-compatible, flexible, extensible core to allow modular additions to Bridge Commander's Python layer, to allow content from many creators to seamlessly play together compatibly.
+This is the Foundation Framework for Bridge Commander, the plug-in framework, library and toolkit that jumpstarted the game's modding scene. It is a forward-compatible, flexible, extensible core to allow modular additions to Bridge Commander's Python layer, to allow content from many creators to seamlessly play together compatibly.
 
 The Foundation is:
 
 - A forward-looking, object-oriented flexible core framework for game assets. The Foundation overwrites standard Bridge Commander scripts where necessary so you don't have to, and defines ways for well-written mods from different authors to co-exist without conflict.
-- A means to automatically load plugins and updates, and a way for new content to supercede the old.
-- Function libraries and object-oriented classes which allow for reliably added and modded content. Anything the game's Python layer can do, the Foundation offers several approaches adding to or replacing the game's content with new mods. If needed, they can even be activated and de-activated in-game if packaged as mutators.
+- A means to automatically load new plugins and updates, and manage updates so new content supercede the old.
+- Function libraries, class libraries, and toolkits which allow for reliably added and modded content. Anything the game's Python layer can do, the Foundation offers several approaches adding to or replacing the game's content with new mods. If needed, they can even be activated and de-activated in-game if packaged as mutators.
 
 Since 2002, the Foundation Framework has made a range of coding and content mods possible.  These can be beginner-friendly and content-specific ways to add ships, sounds, and media, or self-contained and reversible patching and injection methods for savvy Python coders.
 
