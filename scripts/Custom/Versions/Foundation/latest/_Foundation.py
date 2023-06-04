@@ -5,6 +5,18 @@
 # All rights reserved under the Lesser GNU Public License v2.1
 #########################################################
 
+# This file is the product of merging multiple collections of the Foundation and 
+# scattered update plugins for the Foundation:  that maintained on Favor the Bold's 
+# CVS server and that maintained until 2008 by MLeo.  As of this writing, it is 
+# the first time that Foundation's core functionality has been contained in a single 
+# file instead of a range of plugins in over 20 years.
+
+# What was missing was a design pattern that allowed a Foundation installation to 
+# continue working even with outdated versions of Foundation copied over it, or broken 
+# update plugins.  A huge maintenance issue is now resolved, as we now use git branches 
+# and merges for Foundation internally, and save plugins, mutators, and OverrideDefs 
+# for different mods from different authors.
+
 import App
 import Foundation
 import FoundationTriggers
@@ -188,7 +200,7 @@ class MusicDef:
                 if ext == "mp3":
                     self.dMain[sName] = name
                     self.dStates[sGroup].append(name)
-        except SyntaxError:
+        except FlagrantError:
             pass
 
     def Add(self, obj):
@@ -196,7 +208,7 @@ class MusicDef:
         try:
             self.dMain.update(obj.dMain)
             self.dStates.update(obj.dStates)
-        except SyntaxError:
+        except FlagrantError:
             pass
 
         # Now add in from the subfolders
@@ -204,7 +216,7 @@ class MusicDef:
             for i in obj.lFolders:
                 s = string.split(i, "/")
                 self.AddFolder(i, s[-1])
-        except SyntaxError:
+        except FlagrantError:
             pass
 
     def BuildList(self):
@@ -639,9 +651,10 @@ class BridgeDef(MutatorElementDef):
                 try:
                     exec(loc[i])
                 except SyntaxError:
+                    debug(__name__ + 'BridgeDef.SetLocation error on ' + locationName)
                     pass  # raise SyntaxError, evalStr
             return 1
-        except SyntaxError:
+        except FlagrantError:
             pass
         return None
 
@@ -1315,7 +1328,7 @@ def LoadExtraShips(dir="scripts\\Custom\\Ships", dReservedShips=_excludedShips):
                     if hasattr(pModule, "GetShipStats"):
                         stats = pModule.GetShipStats()
                         LoadToOther(shipFile, stats["Name"], stats["Species"], shipDotPrefix)
-                except SyntaxError:
+                except FlagrantError:
                     continue
 
 

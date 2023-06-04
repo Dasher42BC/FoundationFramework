@@ -1,6 +1,6 @@
 # Foundation Framework for Bridge Commander
 
-This is the Foundation Framework for Bridge Commander, the plug-in framework, library and toolkit that jumpstarted the game's modding scene. It is a forward-compatible, flexible, extensible core to allow modular additions to Bridge Commander's Python layer, to allow content from many creators to seamlessly play together compatibly.
+This is the Foundation Framework for Bridge Commander, the plug-in manager, library, and toolkit that jumpstarted the game's modding scene. It is a forward-compatible, flexible, extensible core to allow modular additions to Bridge Commander's Python layer, to allow content from many creators to seamlessly play together compatibly.
 
 The Foundation is:
 
