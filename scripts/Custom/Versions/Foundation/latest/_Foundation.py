@@ -66,14 +66,26 @@ _g_dExcludePlugins = {
     "LoadRemoveNanoFolderDefAnnex": 1,
 }
 
+
 # This stupidly simple setter put in place to keep people using the interface, not implementation.  Because, that's naughty.
 def SetExcludePlugin(sImport):
     global _g_dExcludePlugins
     _g_dExcludePlugins[sImport] = 1
 
+
+# Reserved scripts\Plugins\*.py files we don't want to load
+_excludedShips = {"__init__": 1, "example": 1}
+
+
+def SetExcludeShip(sShipName):
+    global _excludedShips
+    _excludedShips[sShipName] = 1
+
+
 # For anywhere an empty object is needed
 class Dummy:
     pass
+
 
 class Flags:
     """A generic long bitvector.  Accessors maintain integrity of the >32 bit size."""
@@ -136,7 +148,6 @@ class Flags:
         return self._value
 
 
-
 ERA_ENT = 1
 ERA_PRETOS = 2
 ERA_TOS = 4
@@ -150,6 +161,7 @@ ERA_PIC = 256
 
 def Initialize(bTestFlag=0):
     import Foundation
+
     global bTesting
 
     if not Foundation.bFoundationInitialized:
@@ -160,6 +172,7 @@ def Initialize(bTestFlag=0):
 
         Foundation.LoadExtraShips()
         Foundation.LoadExtraPlugins()
+
 
 # Music lists, potentially faction and era specific
 class MusicDef:
@@ -301,9 +314,9 @@ MusicDef.default.dStates = {
 }
 
 
-
 #########################################################
 # Mode-related definitions
+
 
 # The MutatorDef is a definition of a game mode, a collection of references to the active
 # ships, projectiles, and other plugins that loaded into a game.
@@ -332,7 +345,7 @@ class MutatorDef:
             mutatorList.Register(self, self.name)
 
     def Update(self, mode):
-        # print 'Updating %s from %s; base flag %d, start %s' % (self.name, mode.name, mode.bBase, mode.startShipDef)
+        debug(__name__ + ": Updating %s from %s; base flag %d, start %s" % (self.name, mode.name, mode.bBase, mode.startShipDef))
         if mode.startShipDef:
             self.startShipDef = mode.startShipDef
 
@@ -346,7 +359,7 @@ class MutatorDef:
     # variable accesses, given Python's non-private nature, but polymorphic subclassing operates
     # on methods, not member data. -Dasher42
     def Enable(self):
-        # print 'Enabling', self.name
+        debug(__name__ + ": Enabling" + self.name)
         self.bEnabled = 1
 
         # Activate the code overrides
@@ -354,7 +367,7 @@ class MutatorDef:
             i.ImmediateActivate()
 
     def Disable(self):
-        # print 'Disabling', self.name
+        debug(__name__ + ": Disabling" + self.name)
         self.bEnabled = 0
         # We need to make a copy of the list prior to reversing it
         revList = self.overrides[:]
@@ -560,6 +573,7 @@ class FactionDef:
         self.ships = []
         self.weapons = []
         self.music = MusicDef.default
+
 
 RaceDef = FactionDef
 
@@ -784,8 +798,6 @@ class ShipDef(MutatorElementDef):
             mode.playerShipMenu[group] = ([self], {self.name: self})
         if mode.elements.count(self) == 0:
             mode.elements.append(self)
-
-
 
 
 Federation = FactionDef("Federation", "Fed")
@@ -1026,12 +1038,12 @@ class RedirectMutatorDef(MutatorDef):
 FolderManager = RedirectMutatorDef()
 
 
-
 ##########################################################
 # The cat's out of the bag on this one already, as TriggerDefs have found
 # their way into NanoFX.  They are an event listener encapsulated into a
 # contained MutatorElement object, able to be created and shut down easily.
 ##########################################################
+
 
 class TriggerDef(MutatorElementDef):
     def __init__(self, name, eventKey, dict={}):
@@ -1060,6 +1072,7 @@ class TriggerDef(MutatorElementDef):
 
     def Activate(self):
         import MissionLib
+
         debug(__name__ + ", Activate")
         debug(__name__ + ", Activate " + str(self.eventKey))
         debug(__name__ + ", Activate " + str(self.name + str(self.eventKey)))
@@ -1233,7 +1246,6 @@ class EventQueueDef(TimerDef):
             self.Stop(1)
 
 
-
 #########################################################
 # System-related definitions
 
@@ -1252,11 +1264,10 @@ class FolderDef(OverrideDef):
         Foundation.FolderManager.Remove(self.type, self.folder)
 
 
-FolderDef("ship", "ships.", { 'modes': [ Foundation.MutatorDef.StockShips ] })
-FolderDef("hp", "ships.Hardpoints.", { 'modes': [ Foundation.MutatorDef.StockShips ] })
+FolderDef("ship", "ships.", {"modes": [Foundation.MutatorDef.StockShips]})
+FolderDef("hp", "ships.Hardpoints.", {"modes": [Foundation.MutatorDef.StockShips]})
 
 
-# import nt
 # Check to make sure a file is there.  Returns 0/1 for false/true.
 def VerifyFile(file):
     return 1
@@ -1283,12 +1294,15 @@ def LoadToOther(shipFile, name, species, shipPrefix):
         thisShip.RegisterQBPlayerShipMenu(menuGroup)
 
 
-# Reserved scripts\Plugins\*.py files we don't want to load
-reservedShips = {"__init__": None, "example": None}
-
-
-# Based off of Banbury's GetShipList() snippet. -Dasher
-def LoadExtraShips(dir="scripts\\Custom\\Ships", hpdir="scripts\\Custom\\Ships\\Hardpoints", dReservedShips=reservedShips):
+#########################################################
+# Based off of Banbury's GetShipList() snippet. -Dasher42
+# Parameters:
+# 	dir:  A path to the subfolder of Bridge Commander to look for .py or .pyc files to autoload
+# 	hpdir:  A path to the subfolder of Bridge Commander to look for hardpoints
+# 	dReservedShips: An optional list of
+# Effects:  Imports all .py and .pyc files found in the folder that are not named in dExcludePlugins.
+# Returns:  None
+def LoadExtraShips(dir="scripts\\Custom\\Ships", hpdir="scripts\\Custom\\Ships\\Hardpoints", dReservedShips=_excludedShips):
     import nt
     import string
 
@@ -1351,7 +1365,7 @@ def LoadExtraPlugins(dir="scripts\\Custom\\Autoload", dExcludePlugins=_g_dExclud
         fileName = string.join(s[:-1], ".")
 
         # We don't want to accidentally load the wrong ship.
-        if (extension == "pyc" or extension == "py"):
+        if extension == "pyc" or extension == "py":
             if dExcludePlugins.has_key(fileName):
                 debug(__name__ + ": Ignoring outdated plugin" + fileName)
                 continue
@@ -1374,11 +1388,11 @@ def LoadConfig():
         pModule = __import__("Custom.FoundationConfig")
     except:
         pModule = Dummy()
-            
-    if not pModule.__dict__.has_key('lActiveMutators'):
+
+    if not pModule.__dict__.has_key("lActiveMutators"):
         pModule.lActiveMutators = []
     # 2023: we are now assuming all mutators active unless otherwise specified
-    if not pModule.__dict__.has_key('lDeactivatedMutators'):
+    if not pModule.__dict__.has_key("lDeactivatedMutators"):
         pModule.lDeactivatedMutators = []
 
     for i in mutatorList._keyList.values():
@@ -1399,7 +1413,7 @@ def SaveConfig():
         pModule = __import__("Custom.FoundationConfig")
     except:
         pModule = Dummy()
-        
+
     pModule.lActiveMutators = []
     pModule.lDeactivatedMutators = []
 
@@ -1456,7 +1470,7 @@ def GetFileNames(sFolderPath, extension):
 
 
 def IsDir(sFolder):
-    return (nt.stat(sFolder)[0] & 0170000) == 0040000
+    return (nt.stat(sFolder)[0] & 61440) == 16384
 
 
 ###############################################################################
@@ -1471,7 +1485,7 @@ def GetFolderNames(sFolderPath, matching=None):
     for i in lsFiles:
         if i == ".git":
             continue
-        if not (nt.stat(sFolderPath + '//' + i)[0] & 0170000) == 0040000:
+        if not (nt.stat(sFolderPath + "//" + i)[0] & 61440) == 16384:
             continue
         if matching and string.find(string.lower(i), matching) == -1:
             continue
@@ -1481,6 +1495,9 @@ def GetFolderNames(sFolderPath, matching=None):
     return retList
 
 
+###############################################################################
+# This is a simple function, but it's reimplemented badly elsewhere and that needs to change. -Dasher42
+###############################################################################
 def GetShipScript(pPlayer):
     import string
 
