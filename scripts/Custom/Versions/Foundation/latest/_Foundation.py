@@ -5,16 +5,16 @@
 # All rights reserved under the Lesser GNU Public License v2.1
 #########################################################
 
-# This file is the product of merging multiple collections of the Foundation and 
-# scattered update plugins for the Foundation:  that maintained on Favor the Bold's 
-# CVS server and that maintained until 2008 by MLeo.  As of this writing, it is 
-# the first time that Foundation's core functionality has been contained in a single 
+# This file is the product of merging multiple collections of the Foundation and
+# scattered update plugins for the Foundation:  that maintained on Favor the Bold's
+# CVS server and that maintained until 2008 by MLeo.  As of this writing, it is
+# the first time that Foundation's core functionality has been contained in a single
 # file instead of a range of plugins in over 20 years.
 
-# What was missing was a design pattern that allowed a Foundation installation to 
-# continue working even with outdated versions of Foundation copied over it, or broken 
-# update plugins.  A huge maintenance issue is now resolved, as we now use git branches 
-# and merges for Foundation internally, and save plugins, mutators, and OverrideDefs 
+# What was missing was a design pattern that allowed a Foundation installation to
+# continue working even with outdated versions of Foundation copied over it, or broken
+# update plugins.  A huge maintenance issue is now resolved, as we now use git branches
+# and merges for Foundation internally, and save plugins, mutators, and OverrideDefs
 # for different mods from different authors.
 
 import App
@@ -413,15 +413,6 @@ class MutatorDef:
             return self.startShipDef.GetBridge()
         return "GalaxyBridge"
 
-    def GetMusic(self):
-        try:
-            return self.music
-        except AttributeError:
-            try:
-                return self.faction.music
-            except AttributeError:
-                return MusicDef.default
-
 
 # A gameplay mode for a stock BC setup
 MutatorDef.Stock = MutatorDef("Stock Systems")
@@ -651,7 +642,7 @@ class BridgeDef(MutatorElementDef):
                 try:
                     exec(loc[i])
                 except SyntaxError:
-                    debug(__name__ + 'BridgeDef.SetLocation error on ' + locationName)
+                    debug(__name__ + "BridgeDef.SetLocation error on " + locationName)
                     pass  # raise SyntaxError, evalStr
             return 1
         except FlagrantError:
@@ -795,6 +786,15 @@ class ShipDef(MutatorElementDef):
             mode.playerShipMenu[group] = ([self], {self.name: self})
         if mode.elements.count(self) == 0:
             mode.elements.append(self)
+
+    def GetMusic(self):
+        try:
+            return self.music
+        except AttributeError:
+            try:
+                return self.faction.music
+            except AttributeError:
+                return MusicDef.default
 
 
 Federation = FactionDef("Federation", "Fed")
@@ -1261,8 +1261,8 @@ class FolderDef(OverrideDef):
         Foundation.FolderManager.Remove(self.type, self.folder)
 
 
-FolderDef("ship", "ships.", {"modes": [Foundation.MutatorDef.StockShips]})
-FolderDef("hp", "ships.Hardpoints.", {"modes": [Foundation.MutatorDef.StockShips]})
+FolderDef("ship", "ships.", {"modes": [MutatorDef.StockShips]})
+FolderDef("hp", "ships.Hardpoints.", {"modes": [MutatorDef.StockShips]})
 
 
 # Check to make sure a file is there.  Returns 0/1 for false/true.

@@ -49,43 +49,7 @@ All content featuring revisions of Totally Games content falls under the terms f
 
 # INSTALLATION
 
-To install this, simply copy the files into the Bridge Commander installation - or a second copy of it, which I do _strongly_ recommend. This can be done with a simple copy of the Bridge Commander folder. If you mess up, just rename your suspect scripts folder and copy the scripts folder from your original BC installation in!
-
-This package can be used with single player and multiplayer game modes, but
-can readily be used to
-
-As a result, you should have:
-
-```
-scripts/bcdebug.py
-scripts/Custom/Autoload/000-Fixes20030221.py
-scripts/Custom/Autoload/000-Fixes20030305-FoundationTriggers.py
-scripts/Custom/Autoload/000-Fixes20030402-FoundationRedirect.py
-scripts/Custom/Autoload/000-Fixes20230424-ShipSubListV4_7Foundation.py
-scripts/Custom/Autoload/000-Utilities-FoundationMusic-20030410.py
-scripts/Custom/Autoload/000-Utilities-GetFileNames-20030402.py
-scripts/Custom/Autoload/FixTorps.py
-scripts/Custom/Autoload/__init__.py
-scripts/Custom/FoundationConfig.py
-scripts/Custom/__init__.py
-scripts/Custom/Ships/__init__.py
-scripts/Fixes20030217.py
-scripts/FoundationMenu.py
-scripts/Foundation.py
-scripts/FoundationTriggers.py
-scripts/Icons/ShipIcons.py
-scripts/LoadBridge.py
-scripts/loadspacehelper.py
-scripts/LoadTacticalSounds.py
-scripts/MainMenu/mainmenu.py
-scripts/QuickBattle/QuickBattle.py
-scripts/Registry.py
-scripts/StaticDefs.py
-scripts/Tactical/Interface/ShieldsDisplay.py
-scripts/Tactical/Interface/WeaponsDisplay.py
-```
-
-...copied to wherever the new copy of Bridge Commander is located. 
+To install this, simply copy the files into the Bridge Commander installation - or a second copy of it, which I do _strongly_ recommend. This can be done with a simple copy of the Bridge Commander folder. If you mess up, just rename your suspect scripts folder and copy the scripts folder from your original BC installation in.
 
 ---
 

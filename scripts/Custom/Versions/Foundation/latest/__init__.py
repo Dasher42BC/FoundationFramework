@@ -8,10 +8,11 @@
 # to hold version numbers and dependency requirements. -Dasher42
 
 from bcdebug import debug
+from Custom.Versions.VersionUtils import UpdateNamespace
 
 debug("Foundation 2023 initializing")
 
-pFoundation = __import__("Foundation")
-pNewFoundation = __import__("_Foundation")
+pTarget = __import__("Foundation")
+pSource = __import__("_Foundation")
 
-pFoundation.__dict__.update(pNewFoundation.__dict__)
+UpdateNamespace(pSource, pTarget)
