@@ -12,7 +12,11 @@ def UpdateNamespace(pSource, pTarget, bClearTargetFirst = 0, lSerializedObjects 
         raise FlagrantError
 
     if bClearTargetFirst:
-        # TODO:  take all steps to re-initialize the module.
-        pass
+        # TODO:  verify that there aren't steps needed to re-initialize the module's members
+        for k in pTarget.__dict__.keys():
+            if k[0] != '_':
+                del pTarget.__dict__[k]
 
-    pTarget.__dict__.update(pSource.__dict__)
+    for k in pSource.__dict__.keys():
+        if k[0] != '_':
+            pTarget.__dict__[k] = pSource.__dict__[k]

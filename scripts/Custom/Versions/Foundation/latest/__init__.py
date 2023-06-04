@@ -12,7 +12,11 @@ from Custom.Versions.VersionUtils import UpdateNamespace
 
 debug("Foundation 2023 initializing")
 
-pTarget = __import__("Foundation")
 pSource = __import__("_Foundation")
+pTarget = __import__("Foundation")
 
 UpdateNamespace(pSource, pTarget)
+
+pSourceMenu = __import__("_Menu")
+pTargetMenu = __import__("FoundationMenu")
+UpdateNamespace(pSourceMenu, pTargetMenu)

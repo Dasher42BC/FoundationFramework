@@ -21,20 +21,23 @@ import App
 import Foundation
 import FoundationTriggers
 from Registry import Registry
+import nt
 
 # Thanks to MLeo for the first piece of a whole new diagnostic framework.
 from bcdebug import debug
 
 version = "20230603"
 
+# TODO:  Odds are, instead of a blacklist for what's serialized, we need a whitelist
 # NonSerializedObjects = ('mode', 'version', 'MotionBlurOverrider', 'mbOverrider')
+
 
 #########################################################
 # Shared dictionaries - direct access of these is deprecated
 
 qbShipMenu = {}
 qbPlayerShipMenu = {}
-
+dIcons = {}
 
 #########################################################
 # Shared registries
@@ -72,6 +75,9 @@ _g_dExcludePlugins = {
     "000-Utilities-GetFolderNames-20040326": 1,
     "000-Utilities-MediaList": 1,
     "001-Addons-FoundationRedirect": 1,
+    "001-Addons-WidePhaserIcons": 1,
+    "IsoKineticTorp": 1,
+    "PhasedTorp": 1,
 }
 
 
@@ -200,7 +206,7 @@ class MusicDef:
                 if ext == "mp3":
                     self.dMain[sName] = name
                     self.dStates[sGroup].append(name)
-        except FlagrantError:
+        except StandardError:
             pass
 
     def Add(self, obj):
@@ -208,7 +214,7 @@ class MusicDef:
         try:
             self.dMain.update(obj.dMain)
             self.dStates.update(obj.dStates)
-        except FlagrantError:
+        except StandardError:
             pass
 
         # Now add in from the subfolders
@@ -216,7 +222,7 @@ class MusicDef:
             for i in obj.lFolders:
                 s = string.split(i, "/")
                 self.AddFolder(i, s[-1])
-        except FlagrantError:
+        except StandardError:
             pass
 
     def BuildList(self):
@@ -234,25 +240,31 @@ class MusicDef:
         kMaxlen = 0
         for i in self.dStates.keys():
             k = self.dStates[i]
-            if len(k) > kMaxlen:
-                kMaxlen = len(k)
-                kPtr = k
+            try:
+                if len(k) > kMaxlen:
+                    kMaxlen = len(k)
+                    kPtr = k
+            except TypeError:
+                debug(__name__ + ' TypeError for object ' + str(k))
 
         for i in self.dStates.keys():
             k = self.dStates[i]
-            if len(k) == 0:
-                k = kPtr
-            if len(k) == 1:
-                # This is necessary; BC crashes if there's only one element in a state list.
-                if not bBlanked:
-                    lMain.append("Custom/Music/Blank.mp3", "Blank")
-                    bBlanked = 1
-                k.append("Blank")
-            if i == "Transition":
-                for j in k:
-                    lTrans.append(j)
-            else:
-                lStates.append(i, k)
+            try:
+                if len(k) == 0:
+                    k = kPtr
+                if len(k) == 1:
+                    # This is necessary; BC crashes if there's only one element in a state list.
+                    if not bBlanked:
+                        lMain.append("Custom/Music/Blank.mp3", "Blank")
+                        bBlanked = 1
+                    k.append("Blank")
+                if i == "Transition":
+                    for j in k:
+                        lTrans.append(j)
+                else:
+                    lStates.append(i, k)
+            except TypeError:
+                debug(__name__ + ' TypeError for object ' + str(k))
 
         return (lMain, lTrans, lStates)
 
@@ -480,6 +492,12 @@ class MutatorElementDef:
     def AddToMutator(self, toMode):
         toMode.elements.append(self)
 
+    def Clone(self):
+        other = Dummy()
+        other.__class__ = self.__class__
+        other.__dict__.update(self.__dict__)
+        return other
+
 
 #########################################################
 # Override-related definitions
@@ -645,7 +663,7 @@ class BridgeDef(MutatorElementDef):
                     debug(__name__ + "BridgeDef.SetLocation error on " + locationName)
                     pass  # raise SyntaxError, evalStr
             return 1
-        except FlagrantError:
+        except StandardError:
             pass
         return None
 
@@ -1265,6 +1283,37 @@ FolderDef("ship", "ships.", {"modes": [MutatorDef.StockShips]})
 FolderDef("hp", "ships.Hardpoints.", {"modes": [MutatorDef.StockShips]})
 
 
+class MediaListDef(MutatorElementDef):
+    def __init__(self, name, dict=None):
+        self.dFiles = {}
+
+    def LoadFolder(self, sGroup, sDir, sExt):
+        lFiles = self.GetList(sGroup)
+        lsFileNames = Foundation.GetFileNames(sDir, sExt)
+        for i in lsFileNames:
+            sFile = sDir + "/" + i
+            sHandle = sGroup + str(len(lFiles) + 1)
+            lFiles.append(Foundation.SoundDef(sFile, sHandle))
+            # print sFile, sHandle
+
+    def AddSoundDef(self, sGroup, oSoundDef):
+        lFiles = self.GetList(sGroup)
+        lFiles.append(oSoundDef)
+
+    def GetList(self, sGroup):
+        if self.dFiles.has_key(sGroup):
+            lFiles = self.dFiles[sGroup]
+        else:
+            lFiles = []
+            self.dFiles[sGroup] = lFiles
+        return lFiles
+
+    def __call__(self, sGroup):
+        lFiles = self.dFiles[sGroup]
+        return lFiles[int(App.g_kSystemWrapper.GetRandomNumber(len(lFiles)))].name
+
+
+
 # Check to make sure a file is there.  Returns 0/1 for false/true.
 def VerifyFile(sFile):
     try:
@@ -1299,7 +1348,6 @@ def LoadToOther(shipFile, name, species, shipPrefix):
 # Effects:  Imports all .py and .pyc files found in the folder that are not named in dExcludePlugins.
 # Returns:  None
 def LoadExtraShips(dir="scripts\\Custom\\Ships", dReservedShips=_excludedShips):
-    import nt
     import string
 
     list = nt.listdir(dir)
@@ -1328,7 +1376,7 @@ def LoadExtraShips(dir="scripts\\Custom\\Ships", dReservedShips=_excludedShips):
                     if hasattr(pModule, "GetShipStats"):
                         stats = pModule.GetShipStats()
                         LoadToOther(shipFile, stats["Name"], stats["Species"], shipDotPrefix)
-                except FlagrantError:
+                except StandardError:
                     continue
 
 
@@ -1342,7 +1390,6 @@ def LoadExtraShips(dir="scripts\\Custom\\Ships", dReservedShips=_excludedShips):
 
 
 def LoadExtraPlugins(dir="scripts\\Custom\\Autoload", dExcludePlugins=_g_dExcludePlugins):
-    import nt
     import string
 
     list = nt.listdir(dir)
@@ -1395,7 +1442,6 @@ def LoadConfig():
 #########################################################
 def SaveConfig():
     global mutatorList
-    import nt
 
     try:
         pModule = __import__("Custom.FoundationConfig")
@@ -1490,3 +1536,11 @@ def GetShipScript(pPlayer):
     import string
 
     return string.split(pPlayer.GetScript(), ".")[:-1]
+
+
+def InitializeIcons(kIcons, type):
+    try:
+        for i in Foundation.dIcons[type]:
+            i(kIcons)
+    except KeyError:
+        pass

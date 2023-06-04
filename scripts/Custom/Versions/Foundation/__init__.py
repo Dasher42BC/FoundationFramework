@@ -20,6 +20,5 @@ lDirs.sort()
 if len(lDirs) == 0:
     raise FlagrantError
 else:
-    print "Foundation 2023 loading, version", lDirs[-1]
     pModule = __import__(lDirs[-1])
 

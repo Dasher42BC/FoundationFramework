@@ -1,8 +1,11 @@
 lActiveMutators = [
-    "Extra Ships and Mods",
+    "Favor The Bold",
     "Stock Systems",
-    "Fix Torp Spread",
     "Stock Ships",
+    "Acceleration Intercept",
+    "Extra Ships and Mods",
 ]
 lDeactivatedMutators = [
+    "Shifting Intercept",
+    "Fix Torp Spread",
 ]
