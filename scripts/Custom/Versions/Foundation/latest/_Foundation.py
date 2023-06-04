@@ -8,12 +8,14 @@
 import App
 import Foundation
 import FoundationTriggers
+from Registry import Registry
 
 # Thanks to MLeo for the first piece of a whole new diagnostic framework.
 from bcdebug import debug
 
 version = "20230603"
 
+# NonSerializedObjects = ('mode', 'version', 'MotionBlurOverrider', 'mbOverrider')
 
 #########################################################
 # Shared dictionaries - direct access of these is deprecated
@@ -25,7 +27,6 @@ qbPlayerShipMenu = {}
 #########################################################
 # Shared registries
 
-from Registry import Registry
 
 mutatorList = Registry()
 
@@ -43,7 +44,6 @@ pCurrentBridge = None
 bFoundationInitialized = 0
 bTesting = 1
 
-# NonSerializedObjects = ('mode', 'version', 'MotionBlurOverrider', 'mbOverrider')
 
 _g_dExcludePlugins = {
     # These are legacy Foundation fixes and updates, superceded in Foundation 2023
@@ -60,10 +60,6 @@ _g_dExcludePlugins = {
     "000-Utilities-GetFolderNames-20040326": 1,
     "000-Utilities-MediaList": 1,
     "001-Addons-FoundationRedirect": 1,
-    "002-DevUtil-CheckClicked": 1,
-    "FixTorps": 1,
-    "LoadRemoveNanoBridgeFixAnnex": 1,
-    "LoadRemoveNanoFolderDefAnnex": 1,
 }
 
 
@@ -134,7 +130,7 @@ class Flags:
         self._value = self._value & long(1 << long(num))
 
     def Clear(self):
-        self_value = long(0)
+        self._value = long(0)
 
     def __getitem__(self, i):
         return self._value & long(1 << long(i))
@@ -165,8 +161,6 @@ def Initialize(bTestFlag=0):
     global bTesting
 
     if not Foundation.bFoundationInitialized:
-        import StaticDefs
-
         if bTestFlag != 0:
             bTesting = 1
 
@@ -194,7 +188,7 @@ class MusicDef:
                 if ext == "mp3":
                     self.dMain[sName] = name
                     self.dStates[sGroup].append(name)
-        except:
+        except SyntaxError:
             pass
 
     def Add(self, obj):
@@ -202,7 +196,7 @@ class MusicDef:
         try:
             self.dMain.update(obj.dMain)
             self.dStates.update(obj.dStates)
-        except:
+        except SyntaxError:
             pass
 
         # Now add in from the subfolders
@@ -210,7 +204,7 @@ class MusicDef:
             for i in obj.lFolders:
                 s = string.split(i, "/")
                 self.AddFolder(i, s[-1])
-        except:
+        except SyntaxError:
             pass
 
     def BuildList(self):
@@ -410,10 +404,10 @@ class MutatorDef:
     def GetMusic(self):
         try:
             return self.music
-        except:
+        except AttributeError:
             try:
                 return self.faction.music
-            except:
+            except AttributeError:
                 return MusicDef.default
 
 
@@ -529,13 +523,8 @@ class OverrideDef(MutatorElementDef):
         pre = string.split(self.sItem, ".")
         post = string.split(self.sNewItem, ".")
 
-        if bTesting:
-            self._SwapInModules(pre, post)
-        else:
-            try:
-                self._SwapInModules(pre, post)
-            except:
-                pass
+        debug(__name__ + ": OverrideDef activating: %s %s" % (pre, post))
+        self._SwapInModules(pre, post)
 
     def Deactivate(self):
         import string
@@ -546,13 +535,8 @@ class OverrideDef(MutatorElementDef):
         pre = string.split(self.sItem, ".")
         post = string.split(self.sNewItem, ".")
 
-        if bTesting:
-            self._SwapOutModules(pre, post)
-        else:
-            try:
-                self._SwapOutModules(pre, post)
-            except:
-                pass
+        debug(__name__ + ": OverrideDef deactivating: %s %s" % (pre, post))
+        self._SwapOutModules(pre, post)
 
     def ImmediateActivate(self):
         pass
@@ -657,7 +641,7 @@ class BridgeDef(MutatorElementDef):
                 except SyntaxError:
                     pass  # raise SyntaxError, evalStr
             return 1
-        except:
+        except SyntaxError:
             pass
         return None
 
@@ -958,6 +942,7 @@ class MaskListenerDef:
 
         iAttackerMask = 0
 
+        # TODO - sList is not getting set up correctly; this is incomplete
         iShipMask = sList[pShip.GetName()]._pMask
         iTorpMask = pTorp.GetModuleName()
         if pAttacker:
@@ -1031,7 +1016,7 @@ class RedirectMutatorDef(MutatorDef):
     def Remove(self, type, folder):
         try:
             self.folders[type].remove(folder)
-        except:
+        except AttributeError:
             pass
 
 
@@ -1050,7 +1035,6 @@ class TriggerDef(MutatorElementDef):
         debug(__name__ + ", __init__")
         self.eventKey = eventKey
         self.count = 0
-        key = name + str(eventKey)
         FoundationTriggers.__dict__[name + str(eventKey)] = self
         Foundation.MutatorElementDef.__init__(self, name, dict)
 
@@ -1077,7 +1061,6 @@ class TriggerDef(MutatorElementDef):
         debug(__name__ + ", Activate " + str(self.eventKey))
         debug(__name__ + ", Activate " + str(self.name + str(self.eventKey)))
         if not self.count:
-            pGame = App.Game_GetCurrentGame()
             App.g_kEventManager.AddBroadcastPythonFuncHandler(self.eventKey, MissionLib.GetEpisode(), "FoundationTriggers." + self.name + str(self.eventKey))
         self.count = self.count + 1
 
@@ -1140,7 +1123,6 @@ class TimerDef(DemandTriggerDef):
         self.idTimer = None
         self.tInterval = tInterval
         self.tDuration = tDuration
-        key = name + str(eventKey)
         FoundationTriggers.__dict__[name + str(eventKey)] = self
         Foundation.MutatorElementDef.__init__(self, name, dict)
 
@@ -1149,6 +1131,8 @@ class TimerDef(DemandTriggerDef):
         pass
 
     def Start(self):
+        import MissionLib
+
         # print 'Start:  self.__dict__', self.__dict__
 
         debug(__name__ + ", Start")
@@ -1269,11 +1253,10 @@ FolderDef("hp", "ships.Hardpoints.", {"modes": [Foundation.MutatorDef.StockShips
 
 
 # Check to make sure a file is there.  Returns 0/1 for false/true.
-def VerifyFile(file):
-    return 1
-
+def VerifyFile(sFile):
     try:
-        import file
+        o = __import__(sFile)
+        del o
     except ImportError:
         return 0
     return 1
@@ -1302,7 +1285,7 @@ def LoadToOther(shipFile, name, species, shipPrefix):
 # 	dReservedShips: An optional list of
 # Effects:  Imports all .py and .pyc files found in the folder that are not named in dExcludePlugins.
 # Returns:  None
-def LoadExtraShips(dir="scripts\\Custom\\Ships", hpdir="scripts\\Custom\\Ships\\Hardpoints", dReservedShips=_excludedShips):
+def LoadExtraShips(dir="scripts\\Custom\\Ships", dReservedShips=_excludedShips):
     import nt
     import string
 
@@ -1310,7 +1293,6 @@ def LoadExtraShips(dir="scripts\\Custom\\Ships", hpdir="scripts\\Custom\\Ships\\
     list.sort()
 
     shipDotPrefix = string.join(string.split(dir, "\\")[1:], ".") + "."
-    hpDotPrefix = string.join(string.split(hpdir, "\\")[1:], ".") + "."
 
     for ship in list:
         s = string.split(ship, ".")
@@ -1333,7 +1315,7 @@ def LoadExtraShips(dir="scripts\\Custom\\Ships", hpdir="scripts\\Custom\\Ships\\
                     if hasattr(pModule, "GetShipStats"):
                         stats = pModule.GetShipStats()
                         LoadToOther(shipFile, stats["Name"], stats["Species"], shipDotPrefix)
-                except:
+                except SyntaxError:
                     continue
 
 
@@ -1354,7 +1336,6 @@ def LoadExtraPlugins(dir="scripts\\Custom\\Autoload", dExcludePlugins=_g_dExclud
     list.sort()
 
     dotPrefix = string.join(string.split(dir, "\\")[1:], ".") + "."
-    bTesting = 1
 
     for plugin in list:
         s = string.split(plugin, ".")
@@ -1369,13 +1350,7 @@ def LoadExtraPlugins(dir="scripts\\Custom\\Autoload", dExcludePlugins=_g_dExclud
             if dExcludePlugins.has_key(fileName):
                 debug(__name__ + ": Ignoring outdated plugin" + fileName)
                 continue
-            if bTesting:
-                pModule = __import__(dotPrefix + fileName)
-            else:
-                try:
-                    pModule = __import__(dotPrefix + fileName)
-                except:
-                    pass
+            __import__(dotPrefix + fileName)
 
 
 #########################################################
@@ -1386,7 +1361,7 @@ def LoadConfig():
 
     try:
         pModule = __import__("Custom.FoundationConfig")
-    except:
+    except ImportError:
         pModule = Dummy()
 
     if not pModule.__dict__.has_key("lActiveMutators"):
@@ -1411,7 +1386,7 @@ def SaveConfig():
 
     try:
         pModule = __import__("Custom.FoundationConfig")
-    except:
+    except ImportError:
         pModule = Dummy()
 
     pModule.lActiveMutators = []
@@ -1448,8 +1423,8 @@ def ClearPYCs(dir):
 
 
 ###############################################################################
-## Get File Names with extension from path sFolderPath
-## Based on snippets contributed by Banbury, thank you!
+# Get File Names with extension from path sFolderPath
+# Based on snippets contributed by Banbury, thank you!
 ###############################################################################
 def GetFileNames(sFolderPath, extension):
     import string
@@ -1474,8 +1449,8 @@ def IsDir(sFolder):
 
 
 ###############################################################################
-## Get Folder Names which match expression from path sFolderPath
-## Based on snippets contributed by Banbury, thank you!
+# Get Folder Names which match expression from path sFolderPath
+# Based on snippets contributed by Banbury, thank you!
 ###############################################################################
 def GetFolderNames(sFolderPath, matching=None):
     lsFiles = nt.listdir(sFolderPath)
@@ -1501,5 +1476,4 @@ def GetFolderNames(sFolderPath, matching=None):
 def GetShipScript(pPlayer):
     import string
 
-    l = string.split(pPlayer.GetScript(), ".")
-    return l[-1]
+    return string.split(pPlayer.GetScript(), ".")[:-1]

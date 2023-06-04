@@ -1,6 +1,10 @@
-# Foundation plugin system
-# March 2002
-# Written by Dasher42
+#########################################################
+# Foundation Framework for Bridge Commander
+# StaticDefs for Bridge Commander - these replace a great deal of stock code with Foundation calls.
+# Written March 5, 2002 by Dasher42, all rights reserved.
+# All rights reserved under the Lesser GNU Public License v2.1
+#########################################################
+
 
 # Editing this file is discouraged, and distributing modified versions of this doubly so!
 # It will break compatibility with future releases of Foundation, quite likely break other
@@ -13,7 +17,6 @@
 
 
 import Foundation
-
 import App
 
 # App = Foundation.DummyApp()

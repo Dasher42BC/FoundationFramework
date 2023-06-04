@@ -1,3 +1,10 @@
+#########################################################
+# Foundation Framework for Bridge Commander
+# Written February 21, 2003 - a legacy file for reference purposes only.
+# All rights reserved under the Lesser GNU Public License v2.1
+#########################################################
+
+"""
 # This makes sure nobody gets fussy because they just downgraded. ;)
 import Foundation
 
@@ -88,3 +95,4 @@ else:
     del Initialize
     del BridgeDef
     del BridgeSetLocation
+"""

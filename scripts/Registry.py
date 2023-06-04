@@ -1,6 +1,10 @@
+#########################################################
+# Foundation Framework for Bridge Commander
 # Registry classes; these are considered ordered dictionaries in modern Python
 # First written November 2001, updated June 2023
-# By Dasher42, all rights reserved under the Lesser GNU Public License v2.1
+# Credit for minor bugfix from MLeo, the only bug found in the former version
+# All rights reserved under the Lesser GNU Public License v2.1
+#########################################################
 
 
 # Registry is an ordered dictionary meant to get items either by integers as array offsets, or strings as dictionary keys
@@ -91,6 +95,7 @@ class Registry:
 
     def copy(self):
         import copy
+
         return copy.copy(self)
 
     def keys(self):

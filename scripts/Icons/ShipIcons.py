@@ -1,8 +1,10 @@
-# ShipIcons.py
-#
+#########################################################
+# Foundation Framework for Bridge Commander
 # Load Ship Icons for interface.
-#
-#
+# Written June 3, 2023 as part of Foundation 2023, by Dasher42
+# Credit for legacy snippets from MLeo, Banbury, and others noted where possible.
+# All rights reserved under the Lesser GNU Public License v2.1
+#########################################################
 
 import App
 import Foundation
