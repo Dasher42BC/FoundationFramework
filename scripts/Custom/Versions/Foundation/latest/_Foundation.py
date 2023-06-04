@@ -1,13 +1,18 @@
 #########################################################
-# Foundation Plugin System for Bridge Commander
-# Written June 3, 2023 as part of Foundation 2023 update by Dasher42
+# Foundation Framework for Bridge Commander
+# Written June 3, 2023 as part of Foundation 2023, by Dasher42
+# Credit for legacy snippets from MLeo, Banbury, and others noted where possible.
 # All rights reserved under the Lesser GNU Public License v2.1
 #########################################################
 
 import App
 import Foundation
 import FoundationTriggers
+
+# Thanks to MLeo for the first piece of a whole new diagnostic framework.
 from bcdebug import debug
+
+version = "20230603"
 
 
 #########################################################
@@ -27,20 +32,20 @@ mutatorList = Registry()
 shipList = Registry()
 systemList = Registry()
 raceList = Registry()
+factionList = raceList
 soundList = Registry()
 bridgeList = Registry()
 
 pGameType = None
 pCurrentMode = None
+pCurrentBridge = None
 
+bFoundationInitialized = 0
 bTesting = 1
 
-version = "20230603"
-
 # NonSerializedObjects = ('mode', 'version', 'MotionBlurOverrider', 'mbOverrider')
-bTesting = 0
 
-g_dExcludePlugins = {
+_g_dExcludePlugins = {
     # These are legacy Foundation fixes and updates, superceded in Foundation 2023
     "000-Fixes20030217": 1,
     "000-Fixes20030221": 1,
@@ -61,6 +66,12 @@ g_dExcludePlugins = {
     "LoadRemoveNanoFolderDefAnnex": 1,
 }
 
+# This stupidly simple setter put in place to keep people using the interface, not implementation.  Because, that's naughty.
+def SetExcludePlugin(sImport):
+    global _g_dExcludePlugins
+    _g_dExcludePlugins[sImport] = 1
+
+# For anywhere an empty object is needed
 class Dummy:
     pass
 
@@ -135,34 +146,6 @@ ERA_TNG = 32
 ERA_DS9 = 64
 ERA_NEMESIS = 128
 ERA_PIC = 256
-
-#########################################################
-# Shared dictionaries - direct access of these is deprecated
-
-qbShipMenu = {}
-qbPlayerShipMenu = {}
-
-
-#########################################################
-# Shared registries
-
-from Registry import Registry
-
-mutatorList = Registry()
-
-shipList = Registry()
-systemList = Registry()
-factionList = Registry()
-raceList = factionList
-soundList = Registry()
-bridgeList = Registry()
-
-pGameType = None
-pCurrentMode = None
-pCurrentBridge = None
-
-
-bFoundationInitialized = 0
 
 
 def Initialize(bTestFlag=0):
@@ -1349,16 +1332,7 @@ def LoadExtraShips(dir="scripts\\Custom\\Ships", hpdir="scripts\\Custom\\Ships\\
 # Returns:  None
 
 
-#########################################################
-# Based off of Banbury's GetShipList() snippet.
-# Parameters:
-# 	dir:  A path to the subfolder of Bridge Commander to look for .py or .pyc files to autoload
-# 	dExcludePlugins:  A dictionary whose keys are the filenames, less extensions, to avoid loading.
-# Effects:  Imports all .py and .pyc files found in the folder that are not named in dExcludePlugins.
-# Returns:  None
-
-
-def LoadExtraPlugins(dir="scripts\\Custom\\Autoload", dExcludePlugins=g_dExcludePlugins):
+def LoadExtraPlugins(dir="scripts\\Custom\\Autoload", dExcludePlugins=_g_dExcludePlugins):
     import nt
     import string
 
@@ -1392,6 +1366,7 @@ def LoadExtraPlugins(dir="scripts\\Custom\\Autoload", dExcludePlugins=g_dExclude
 
 #########################################################
 # Loads the Foundation Config, with updates for explicitly deactivated mutators.
+#########################################################
 def LoadConfig():
     global mutatorList
 
@@ -1399,7 +1374,7 @@ def LoadConfig():
         pModule = __import__("Custom.FoundationConfig")
     except:
         pModule = Dummy()
-        
+            
     if not pModule.__dict__.has_key('lActiveMutators'):
         pModule.lActiveMutators = []
     # 2023: we are now assuming all mutators active unless otherwise specified
@@ -1415,6 +1390,7 @@ def LoadConfig():
 
 #########################################################
 # Saves Foundation Config, with updates for explicitly deactivated mutators.
+#########################################################
 def SaveConfig():
     global mutatorList
     import nt
@@ -1459,6 +1435,7 @@ def ClearPYCs(dir):
 
 ###############################################################################
 ## Get File Names with extension from path sFolderPath
+## Based on snippets contributed by Banbury, thank you!
 ###############################################################################
 def GetFileNames(sFolderPath, extension):
     import string
@@ -1484,6 +1461,7 @@ def IsDir(sFolder):
 
 ###############################################################################
 ## Get Folder Names which match expression from path sFolderPath
+## Based on snippets contributed by Banbury, thank you!
 ###############################################################################
 def GetFolderNames(sFolderPath, matching=None):
     lsFiles = nt.listdir(sFolderPath)
