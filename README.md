@@ -1,14 +1,14 @@
 # Foundation Framework for Bridge Commander
 
-This is the Foundation Framework for Bridge Commander, the plug-in manager, library, and toolkit that jumpstarted the game's modding scene. It is a forward-compatible, flexible, extensible core to allow modular additions to Bridge Commander's Python layer, to allow content from many creators to seamlessly play together compatibly.
+This is the Foundation Framework for Bridge Commander, the plug-in manager, library, and toolkit that jumpstarted the game's modding scene in March 2002, and has been its integration layer. It is a forward-compatible, flexible, extensible core to allow modular additions to Bridge Commander's Python layer, to allow content from many creators to seamlessly play together compatibly.  These can be beginner-friendly and content-specific ways to add ships, sounds, and media, or self-contained and reversible patching and injection methods for savvy Python coders.
+
+It is based on an open source, "stone soup" approach. As the rights to Star Trek and Bridge Commander are clearly reserved and in the hands of respected parties, this shared framework designed and licensed for open collaboration of fans and volunteer content creators.
 
 The Foundation is:
 
 - A forward-looking, object-oriented flexible core framework for game assets. The Foundation overwrites standard Bridge Commander scripts where necessary so you don't have to, and defines ways for well-written mods from different authors to co-exist without conflict.
 - A means to automatically load new plugins and updates, and manage updates so new content supercede the old.
 - Function libraries, class libraries, and toolkits which allow for reliably added and modded content. Anything the game's Python layer can do, the Foundation offers several approaches adding to or replacing the game's content with new mods. If needed, they can even be activated and de-activated in-game if packaged as mutators.
-
-Since 2002, the Foundation Framework has made a range of coding and content mods possible.  These can be beginner-friendly and content-specific ways to add ships, sounds, and media, or self-contained and reversible patching and injection methods for savvy Python coders.
 
 The plugin types range from content-specific, stable, and novice-friendly to powerful experts-only tools for programmers:
 
@@ -22,15 +22,13 @@ The plugin types range from content-specific, stable, and novice-friendly to pow
 - Overrides – A special Foundation concept, these are a kind of reversible code injection. They allow you to reversibly, controllably replace an object or module inside the Python interpreter with another without having to overwrite any of the game's .py/.pyc files.
 - Mutators – Another special Foundation concept; it contains any number of the above mods within itself and allows the (de)activation of its contents from a new section of the game configure screen.
 
-While the Foundation cannot guarantee that third-party code using it will behave well, and all Bridge Commander Python code has security and anti-cheat restrictions, the frameowrk provides options to mod developers to use well-tested code that will let them focus on their unique features without conflict with other work.
-
-It is based on an open source, "stone soup" approach. As the rights to Star Trek and Bridge Commander are clearly reserved and in the hands of respected parties, this shared framework designed and licensed for open collaboration of fans and volunteer content creators.
+While the Foundation cannot guarantee that third-party code using it will behave well, and all Bridge Commander Python code has security and anti-cheat restrictions, the frameworkk provides well-tested code to mod developers that will let them focus on their unique features without conflict with other work.
 
 # HISTORY
 
 The original Foundation Plugin System was written by Dasher42.
 
-It was based on a "Dynamic Tables" prototype released February 23, 2002, within days of the original game's release date, and became an official modding framework in March 2002 when Totally Games released the Bridge Commander SDK. The Foundation became the de-facto basis for all non-trivial mods to Bridge Commander, because it uses an object-oriented core and a forward-compatible design philosophy that allows plugins to make deep changes to its function.
+Its first prototype, "Dynamic Tables", was released February 23, 2002, just days after the original game's release date.  The Foundation became an official plug-in framework in March 2002 when Totally Games released the Bridge Commander SDK, and code integration layer by May 2002.  This made it the de-facto basis for all non-trivial mods to Bridge Commander, because it uses an object-oriented core and a forward-compatible design philosophy that allows plugins to make deep changes to its function.
 
 Literally decades later, the framework is still in service, and is now being actively developed to allow modern software development methods on this old, yet surprisingly flexible game. While many amazing mods have been created based on this framework, there remains a great deal of potential.
 
@@ -38,10 +36,11 @@ Literally decades later, the framework is still in service, and is now being act
 
 Soon to come in Foundation 2023:
 
+- A consolidated, clean, maintainable core codebase integrated from the many updates by the original author and many contributors, once again unified and maintainable.
+- A new framework for updates, "Versions", ensuring that the latest version of Foundation and other key components are always retained even when people use outdated installers.
 - A new official launcher and cross-platform mod manager, explicitly supporting Windows and Linux+Wine installations, git-driven snapshots and updates, and more.
 - New pre-flight checks for mods and modpacks, allowing test-driven development without tedious playtesting, and thus more stable mod releases.
-- A new versioned updates framework, ensuring that the latest version of key components are always retained even when people use outdated installers.
-- Simultaneous support for stable single-player campaign and multiplayer modes, while allowing highly moddable local quickbattle and additional campaigns.
+- Simultaneous support for stable single-player campaign and multiplayer modes, while allowing the moddable sandbox people expect of Bridge Commander and Foundation.
 
 All content featuring revisions of Totally Games content falls under the terms found in SDKLicense.txt. All additional code is LGPL: work based on it must include its own source code and abide by the Totally Games license as well.
 
@@ -297,14 +296,14 @@ Original author and lead maintainer
 
 * Dasher42, the original author of the Foundation Framework, who developed the core Foundation libraries with forward-compatibility in mind, and actively co-developed mods and standards needed for them with the community,
 
-The first-generation Foundation Framework contributors who include:
+The first-generation Foundation Framework contributors whose powerhouse work made Foundation better and made its early mod scene so exciting.
 
 * Laurelin, who discovered significant locations in the Totally Games code where the Foundation replaced mod-resistant code with flexible data structures, and without whom the release of prototypes within days of the game's original release and the first official Foundation within days of the SDK release would not have been possible so soon,
-* MLeoDaalder who did much to update and maintain Foundation extensions over the years, becoming the acting lead for years, and contributed invaluable debugging and utility code,
 * Banbury, whose snippets contributed to the Foundation's easy of use with copied-in files,
-* Apollo, who helped inspire the Foundation's maturation into a full-blown code framework, capable of updating even itself through plug-ins
-* Nano, whose feedback while designing the first GUI tools to help users publish content from Foundation was valuable, and whose NanoFX pushed the limits of what was considered possible,
 * Sleight42, whose launcher framework proved how small ships and add-on ship functionality can work,
+* Nano, whose feedback while designing the first GUI tools to help users publish content from Foundation was valuable, and whose NanoFX pushed the limits of what was considered possible,
+* Apollo, who helped inspire the Foundation's maturation into a full-blown code framework, capable of updating even itself through plug-ins
+* MLeoDaalder who did much to update and maintain Foundation extensions over the years, becoming the acting lead for years, and contributed invaluable debugging and utility code,
 * Sneaker98, whose MVAM framework is a modding of triumph, both for separable ship sections and for animations,
 * Defiant, whose work starting the famed Kobayashi Maru modpack led to snippets that are valuable to such large-scale integrations
 
@@ -316,5 +315,9 @@ The innovative and persistent Bridge Commander community who kept pieces of modd
 * Mario, who took on next-generation tools development and inspired innovative new ways to mock Appc for testing purposes, and suggested useful WrapperDefs which greatly expand our options for debugging without disturbing regular users, and whose work on DS9FX drove ideas of what Foundation could better support,
 * Tethys, who brought internet multiplayer back into service, and who helped multiplayer-ready stable mplayer/ script directories work in parallel with the usual moddable scripts/,
 * VonFrank42, whose tested minimalism helped pinpoint the best practices yet discovered, and how they should integrate to revive Single Player and Multiplayer in full.
+
+Thanks also go out to those who kept Bridge Commander and Foundation exciting, whoever was at the helm of Foundation, including:
+
+Pneumonic81, Raven Night, Mark, Lost Jedi, 
 
 That's all, have fun!
