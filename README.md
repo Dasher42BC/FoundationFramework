@@ -274,11 +274,13 @@ This software is provided as-is, and the author makes no guarantee of the perfor
 
 Permission is given to modify or distribute the included files as a component of Bridge Commander under the terms of the Totally Games SDK license (included as SDKLicense.txt) with the following provisions:
 
-This README.md file, the SDKLicense.txt, and LICENSE file shall be included in any distribution, and credit given in any work which incorporates this package's files,
+This README.md file, the SDKLicense.txt, and LICENSE file shall be included in any distribution, and credit given in any work which incorporates this package's files.
+
+The Foundation's own files are provided under the terms of the Lesser GNU Public License 2.1.  This helpful guide will help you to understand it, and how it complements the licensing of the stock and SDK files for Bridge Commander: https://www.tldrlegal.com/license/gnu-lesser-general-public-license-v2-1-lgpl-2-1
 
 Any inclusion of the non-Totally Games source code contained herein may only be distributed with complete source code of the Foundation and all .py files of the codebase built with it, included per the terms of the Lesser GNU Public License (LGPL) as of v2.1 and the terms of Totally Games' SDKLicense.txt. Any redistributions which include these Python assets, imports them, revises them, or builds on them must include their own Python source, including a .py file for every included .pyc, sufficient to have a complete Python layer when added to Totally Games assets and Foundation libraries. This ensures the maintainability and fairness of the Foundation ecosystem to all participants.
 
-A documented link to the Bridge Commander SDK 1.1 such as https://www.moddb.com/games/star-trek-bridge-commander/downloads/star-trek-bridge-commander-sdk-v11 for any unmodified stock .py files is a good way to uphold both the Foundation's LGPL license and the Totally Games/Activision license simultaneously.
+A documented link to the Bridge Commander SDK 1.1 such as https://www.moddb.com/games/star-trek-bridge-commander/downloads/star-trek-bridge-commander-sdk-v11 for any unmodified stock .py files is a good way to uphold both the Foundation's LGPL license and the Totally Games/Activision license simultaneously.  Modified files must be included, always.
 
 Binary and non-Python assets (i.e. NIFs, TGAs, WAVs, MP3s) included with any redistribution of the Foundation Framework shall be construed exclusively as "New Game Materials" per the Totally Games SDK license. As they are not code, they are not contiguous with the LGPL Python code contained herein.
 
@@ -288,12 +290,31 @@ All trademarks, rights, prohibitions against unauthorized monetization expressed
 
 Modders, coders, and content creators are encouraged to use the Foundation Framework with respect for its open source license and nature and the participatory benefits it brings them. If you distribute changes to it or with it, make them open per the Totally Games and LGPL licenses and give the following people credit:
 
-Dasher42, the original author of the Foundation Framework,
 
-Laurelin, who discovered significant portions of the Totally Games code of interest to these modifications,
+### Credits
 
-MLeoDaalder who did much to update and maintain Foundation extensions over the years,
+Original author and lead maintainer
 
-And also Sleight42, Sneaker98, and Banbury whose feedback and snippets contributed to the Foundation and its popular add-ons.
+* Dasher42, the original author of the Foundation Framework, who developed the core Foundation libraries with forward-compatibility in mind, and actively co-developed mods and standards needed for them with the community,
+
+The first-generation Foundation Framework contributors who include:
+
+* Laurelin, who discovered significant locations in the Totally Games code where the Foundation replaced mod-resistant code with flexible data structures, and without whom the release of prototypes within days of the game's original release and the first official Foundation within days of the SDK release would not have been possible so soon,
+* MLeoDaalder who did much to update and maintain Foundation extensions over the years, becoming the acting lead for years, and contributed invaluable debugging and utility code,
+* Banbury, whose snippets contributed to the Foundation's easy of use with copied-in files,
+* Apollo, who helped inspire the Foundation's maturation into a full-blown code framework, capable of updating even itself through plug-ins
+* Nano, whose feedback while designing the first GUI tools to help users publish content from Foundation was valuable, and whose NanoFX pushed the limits of what was considered possible,
+* Sleight42, whose launcher framework proved how small ships and add-on ship functionality can work,
+* Sneaker98, whose MVAM framework is a modding of triumph, both for separable ship sections and for animations,
+* Defiant, whose work starting the famed Kobayashi Maru modpack led to snippets that are valuable to such large-scale integrations
+
+The innovative and persistent Bridge Commander community who kept pieces of modding history that could easily have been lost forever, and inspired a return to active, freshly-inspired Foundation development in 2023:
+
+* Blackrook32, whose work on detailed subsystem management helps push the sense of what's possible and helps drive Foundation's core support,
+* Darkthunder, maintainer of the community forums where much history and valuable feedback remained,
+* JimmyB76, Bridge Commander's biggest cheerleader, who held the community's common square,
+* Mario, who took on next-generation tools development and inspired innovative new ways to mock Appc for testing purposes, and suggested useful WrapperDefs which greatly expand our options for debugging without disturbing regular users, and whose work on DS9FX drove ideas of what Foundation could better support,
+* Tethys, who brought internet multiplayer back into service, and who helped multiplayer-ready stable mplayer/ script directories work in parallel with the usual moddable scripts/,
+* VonFrank42, whose tested minimalism helped pinpoint the best practices yet discovered, and how they should integrate to revive Single Player and Multiplayer in full.
 
 That's all, have fun!
