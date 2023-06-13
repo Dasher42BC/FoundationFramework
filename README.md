@@ -273,7 +273,7 @@ This software is provided as-is, and the author makes no guarantee of the perfor
 
 Permission is given to modify or distribute the included files as a component of Bridge Commander under the terms of the Totally Games SDK license (included as SDKLicense.txt) with the following provisions:
 
-This README.md file, the SDKLicense.txt, and LICENSE file shall be included in any distribution, and credit given in any work which incorporates this package's files.
+This README.md file, the SDKLicense.txt, and LICENSE file shall be included in any distribution, and credit given in any work which incorporates, modifies, extends, or alters the running of this package's files.
 
 The Foundation's own files are provided under the terms of the Lesser GNU Public License 2.1.  This helpful guide will help you to understand it, and how it complements the licensing of the stock and SDK files for Bridge Commander: https://www.tldrlegal.com/license/gnu-lesser-general-public-license-v2-1-lgpl-2-1
 
@@ -285,7 +285,7 @@ Binary and non-Python assets (i.e. NIFs, TGAs, WAVs, MP3s) included with any red
 
 All rights are reserved by the author(s).
 
-All trademarks, rights, prohibitions against unauthorized monetization expressed in Totally Games' licenses and CBS/Paramount's policies towards the Star Trek franchise apply.
+All trademarks, rights, prohibitions against unauthorized monetization expressed in Totally Games' licenses and CBS/Paramount's policies towards the Star Trek franchise apply.  Any solicitation of funds for the distribution of Foundation or Foundation-based content is explicitly forbidden.
 
 Modders, coders, and content creators are encouraged to use the Foundation Framework with respect for its open source license and nature and the participatory benefits it brings them. If you distribute changes to it or with it, make them open per the Totally Games and LGPL licenses and give the following people credit:
 
