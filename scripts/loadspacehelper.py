@@ -11,8 +11,10 @@ import StaticDefs
 if App.g_kUtopiaModule.GetTestMenuState() != 0:
     Foundation.bTesting = 1
 
-Foundation.LoadExtraShips()
-Foundation.LoadExtraPlugins()
+try:
+    import Custom.Autoload
+except ImportError:
+    debug(__name__ + ': Unsupported Autoload.  Please see README.md and manually edit scripts/Custom/Autoload/__init__.py to import reviewed plugins.')
 
 ###############################################################################
 

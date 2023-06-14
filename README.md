@@ -1,5 +1,21 @@
 # Foundation Framework for Bridge Commander
 
+# This project is defunct.
+
+Auto-loading third-party Python plugins has proved to be this project's undoing.  The quality, the valid authorship, and sometimes even the intentions behind all that has been made to use the scripts/Custom/Autoload folder have varied wildly, and some of them have blatantly obstructed updates and bugfixes to this project.  Even within a restricted environment, this is untenable.
+
+The author disavows all use of automatically-loaded Python plugins that have simply been copied in, re-emphasizes the "as-is" notice that has been in the Foundation's documentation from the beginning, and refuses to support the bad practice appearing in the ecosystem.
+
+While some have the impression that loading the contents of scripts/Custom/Autoload is the only role of the Foundation, this is false.  Foundation remains a class library for essential code functions.  This was its original goal as a framework for modpack authors.
+
+This is the only version of the Foundation blessed by its original author, Dasher42, who cannot continue to debug the interactions between code between many other authors, which unfortunately include hostile plagiarists.
+
+The LoadExtraPlugins and LoadExtraShips functions have been removed.  It is recommended that in any legacy releases of the Foundation, they be removed, with a trivial set of imports added to mimic the function of a vetted Autoload directory.  There is no substitute for code review, and it takes non-trivial skill on the part of the modpack authors to ensure quality builds.  Please respect their work.
+
+Any addition of third-party code, re-addition of Autoloads, or usage of code not compliant with the LGPL or Totally Games licenses is completely unsupported and discouraged by this project.  Any risks for such modifications are assumed by those who make or distribute them.
+
+---
+
 This is the Foundation Framework for Bridge Commander, the plug-in manager, library, and toolkit that jumpstarted the game's modding scene in March 2002, and has been its integration layer. It is a forward-compatible, flexible, extensible core to allow modular additions to Bridge Commander's Python layer, to allow content from many creators to seamlessly play together compatibly.  These can be beginner-friendly and content-specific ways to add ships, sounds, and media, or self-contained and reversible patching and injection methods for savvy Python coders.
 
 It is based on an open source, "stone soup" approach. As the rights to Star Trek and Bridge Commander are clearly reserved and in the hands of respected parties, this shared framework designed and licensed for open collaboration of fans and volunteer content creators.

@@ -182,8 +182,11 @@ def Initialize(bTestFlag=0):
         if bTestFlag != 0:
             bTesting = 1
 
-        Foundation.LoadExtraShips()
-        Foundation.LoadExtraPlugins()
+        try:
+            import Custom.Autoload
+        except ImportError:
+            debug(__name__ + ': Unsupported Autoload.  Please see README.md and manually edit scripts/Custom/Autoload/__init__.py to import reviewed plugins.')
+            
 
 
 # Music lists, potentially faction and era specific
@@ -1337,80 +1340,6 @@ def LoadToOther(shipFile, name, species, shipPrefix):
         thisShip = ShipDef(shipFile, species, {"name": name, "shipPrefix": shipPrefix})
         thisShip.RegisterQBShipMenu(menuGroup)
         thisShip.RegisterQBPlayerShipMenu(menuGroup)
-
-
-#########################################################
-# Based off of Banbury's GetShipList() snippet. -Dasher42
-# Parameters:
-# 	dir:  A path to the subfolder of Bridge Commander to look for .py or .pyc files to autoload
-# 	hpdir:  A path to the subfolder of Bridge Commander to look for hardpoints
-# 	dReservedShips: An optional list of
-# Effects:  Imports all .py and .pyc files found in the folder that are not named in dExcludePlugins.
-# Returns:  None
-def LoadExtraShips(dir="scripts\\Custom\\Ships", dReservedShips=_excludedShips):
-    import string
-
-    list = nt.listdir(dir)
-    list.sort()
-
-    shipDotPrefix = string.join(string.split(dir, "\\")[1:], ".") + "."
-
-    for ship in list:
-        s = string.split(ship, ".")
-        if len(s) <= 1:
-            continue
-        # Indexing by -1 lets us be sure we're grabbing the extension. -Dasher42
-        extension = s[-1]
-        shipFile = string.join(s[:-1], ".")
-
-        # We don't want to accidentally load the wrong ship.
-        if (extension == "pyc" or extension == "py") and not dReservedShips.has_key(string.lower(shipFile)):
-            if bTesting:
-                pModule = __import__(shipDotPrefix + shipFile)
-                if hasattr(pModule, "GetShipStats"):
-                    stats = pModule.GetShipStats()
-                    LoadToOther(shipFile, stats["Name"], stats["Species"], shipDotPrefix)
-            else:
-                try:
-                    pModule = __import__(shipDotPrefix + shipFile)
-                    if hasattr(pModule, "GetShipStats"):
-                        stats = pModule.GetShipStats()
-                        LoadToOther(shipFile, stats["Name"], stats["Species"], shipDotPrefix)
-                except StandardError:
-                    continue
-
-
-#########################################################
-# Based off of Banbury's GetShipList() snippet.
-# Parameters:
-# 	dir:  A path to the subfolder of Bridge Commander to look for .py or .pyc files to autoload
-# 	dExcludePlugins:  A dictionary whose keys are the filenames, less extensions, to avoid loading.
-# Effects:  Imports all .py and .pyc files found in the folder that are not named in dExcludePlugins.
-# Returns:  None
-
-
-def LoadExtraPlugins(dir="scripts\\Custom\\Autoload", dExcludePlugins=_g_dExcludePlugins):
-    import string
-
-    list = nt.listdir(dir)
-    list.sort()
-
-    dotPrefix = string.join(string.split(dir, "\\")[1:], ".") + "."
-
-    for plugin in list:
-        s = string.split(plugin, ".")
-        if len(s) <= 1:
-            continue
-        # Indexing by -1 lets us be sure we're grabbing the extension. -Dasher42
-        extension = s[-1]
-        fileName = string.join(s[:-1], ".")
-
-        # We don't want to accidentally load the wrong ship.
-        if extension == "pyc" or extension == "py":
-            if dExcludePlugins.has_key(fileName):
-                debug(__name__ + ": Ignoring outdated plugin" + fileName)
-                continue
-            __import__(dotPrefix + fileName)
 
 
 #########################################################
