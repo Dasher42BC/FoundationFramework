@@ -2,15 +2,13 @@
 
 # This project is defunct.
 
-Auto-loading third-party Python plugins has proved to be this project's undoing.  The quality, the valid authorship, and sometimes even the intentions behind all that has been made to use the scripts/Custom/Autoload folder have varied wildly, and some of them have blatantly obstructed updates and bugfixes to this project.  Even within a restricted environment, this is untenable.
+Auto-loading third-party Python plugins has proved to be this project's undoing.  The quality, the valid authorship, and sometimes even the intentions behind all that has been made to use the scripts/Custom/Autoload folder have varied wildly, and some of them have obstructed updates and bugfixes to this project.  Even within a restricted Python layer, this is untenable.
 
-The author disavows all use of automatically-loaded Python plugins that have simply been copied in, re-emphasizes the "as-is" notice that has been in the Foundation's documentation from the beginning, and refuses to support the bad practice appearing in the ecosystem.
+The author disavows the scene of wildly conflicting and often plagiarized plugins, often copied into Autoload recklessly and applying obsolete and broken updates, emphasizes "as-is" notice that has been in the Foundation's documentation from the beginning, and refuses to support the bad practice appearing in the ecosystem.
 
-While some have the impression that loading the contents of scripts/Custom/Autoload is the only role of the Foundation, this is false.  Foundation remains a class library for essential code functions.  This was its original goal as a framework for modpack authors.
+While some have the impression that loading the contents of scripts/Custom/Autoload is the only role of the Foundation, this is false.  Foundation remains a class library for essential code functions.  This was its original goal as a framework for modpack authors.  Its design was to make limited, highly targeted use of monkey patches, not open the floodgates for them.  The outcome of this in other projects should sound familiar.  
 
-This is the only version of the Foundation blessed by its original author, Dasher42, who cannot continue to debug the interactions between code between many other authors, which unfortunately include hostile plagiarists.
-
-The LoadExtraPlugins and LoadExtraShips functions have been removed.  It is recommended that in any legacy releases of the Foundation, they be removed, with a trivial set of imports added to mimic the function of a vetted Autoload directory.  There is no substitute for code review, and it takes non-trivial skill on the part of the modpack authors to ensure quality builds.  Please respect their work.
+https://shopify.engineering/the-case-against-monkey-patching
 
 Any addition of third-party code, re-addition of Autoloads, or usage of code not compliant with the LGPL or Totally Games licenses is completely unsupported and discouraged by this project.  Any risks for such modifications are assumed by those who make or distribute them.
 
