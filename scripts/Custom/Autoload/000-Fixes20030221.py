@@ -62,8 +62,6 @@ def Initialize(bTestFlag=0):
         if bTestFlag != 0:
             bTesting = 1
 
-        Foundation.LoadExtraShips()
-        Foundation.LoadExtraPlugins()
 
 
 # print int(Foundation.version)

@@ -30,9 +30,6 @@ import Bridge.Characters.Brex
 
 import Foundation
 
-# Foundation.LoadExtraPlugins( "scripts\\Custom\\BridgePlugins")
-
-#
 # Module globals
 #
 # kDebugObj = App.CPyDebug()
