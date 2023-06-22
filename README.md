@@ -17,6 +17,8 @@ A project with similar goals to the Foundation for any open-source scripting lay
 
 There is no substitute for code review, and it takes non-trivial skill on the part of the modpack authors to ensure quality builds.  Please respect their work.  Any addition of third-party code, re-addition of Autoloads, or usage of code not compliant with the LGPL or Totally Games licenses is completely unsupported and discouraged by this project.  This software is as-is, and any risks or bugs are taken by those who make, distribute, or use them.
 
+Thank you.
+
 ---
 
 This is the Foundation Framework for Bridge Commander, the plug-in manager, library, and toolkit that jumpstarted the game's modding scene in March 2002, and has been its integration layer. It is a forward-compatible, flexible, extensible core to allow modular additions to Bridge Commander's Python layer, to allow content from many creators to seamlessly play together compatibly.  These can be beginner-friendly and content-specific ways to add ships, sounds, and media, or self-contained and reversible patching and injection methods for savvy Python coders.
