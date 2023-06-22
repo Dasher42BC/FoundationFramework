@@ -8,7 +8,7 @@ Auto-loading third-party Python plugins, while being expected functionality, has
 * Rely on savvy users to restrict its automatic loading, or
 * Ensure that hotfixes are retired and real fixes are merged, rather than sticking around for decades and becoming explicit dependencies.  
 
-There is no substitute for code review, and it takes non-trivial skill on the part of the modpack authors to ensure quality builds.  Please respect their work.  Any addition of third-party code, re-addition of Autoloads, or usage of code not compliant with the LGPL or Totally Games licenses is completely unsupported and discouraged by this project.  This software is as-is, and any risks or bugs are taken by those Any risks for such modifications are assumed by those who make, distribute, or use them.
+There is no substitute for code review, and it takes non-trivial skill on the part of the modpack authors to ensure quality builds.  Please respect their work.  Any addition of third-party code, re-addition of Autoloads, or usage of code not compliant with the LGPL or Totally Games licenses is completely unsupported and discouraged by this project.  This software is as-is, and any risks or bugs are taken by those who make, distribute, or use them.
 
 ---
 
