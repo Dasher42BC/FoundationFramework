@@ -2,7 +2,9 @@
 
 # This project is defunct.
 
-Auto-loading third-party Python plugins, while being expected functionality, has proven to be this project's undoing.  Giving full privilege to all code and patches is not a model that can produce reliable code.  Projects like the Foundation can either:
+The widespread violation of this software's license has made the sound maintenance of its ecosystem impossible.  This software has from the beginning been distributed under the terms of the LGPL license, v2.1 being current at the time of its writing.  Any inclusion of any of this project's files while omitting the readme, the license information or reference to it, or all source code - included or available - necessary for a complete build is violating the license, as well as disrupting the conditions needed for coders to correctly integrate and debug diverse work.  Without this, or literacy in why LGPL software is *not* freeware, this software is getting misused in ways that impact the entire ecosystem.
+
+Auto-loading third-party Python plugins, while being expected functionality, has aslo proven to be this project's undoing.  Giving full privilege to all code and patches is not a model that can produce reliable code.  Projects like the Foundation can either:
 
 * Make it a walled garden, restricting third-party modding, or
 * Rely on savvy users to restrict its automatic loading, or
